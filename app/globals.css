@@ -46,18 +46,118 @@ a:focus-visible, button:focus-visible {
   @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 }
 
-/* Metallic rose gold. A wide band of highlights slides across the
-   numbers as each page moves up the screen (see Sheen.tsx). */
-.rosegold {
-  background-image: linear-gradient(
+
+/* ---------- Rose gold metal ----------
+   Layers, top to bottom:
+   1. ::after  sparkle texture + white glint, only while scrolling
+   2. brushed-metal streaks (always on, subtle)
+   3. rose gold gradient that shifts with scroll position (--p)
+   Depth comes from stacked drop-shadows: a bright top bevel,
+   a dark copper edge, and a soft cast shadow onto the plum.     */
+
+:root {
+  --rg-base: linear-gradient(
     100deg,
-    #B9776C 0%, #D9A08F 14%, #F6D5C4 24%, #FFF1E6 29%, #E7B19E 36%,
-    #C0806F 48%, #DCA591 60%, #F8DCCB 70%, #FFF3EA 74%, #E0A893 82%, #B9776C 100%
+    #A9665C 0%, #D39A88 12%, #F4D0BE 22%, #FFF2E8 27%, #E6AE9A 34%,
+    #B8766A 46%, #D9A18D 58%, #F7D9C8 68%, #FFF4EC 72%, #DEA48F 80%, #A9665C 100%
   );
-  background-size: 260% 100%;
-  background-position: calc(var(--p, 0.5) * 100%) 50%;
+  --rg-brush: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004 0.9' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
+  --rg-spark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.95 0 0 0 0 0.9 0 0 0 14 -8.6'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+  --rg-glint: linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.0) 42%, rgba(255,246,238,0.7) 50%, rgba(255,255,255,0.0) 58%, transparent 62%);
+}
+
+.metal {
+  position: relative;
+  display: inline-block;
+  /* room for italic overhangs so nothing gets clipped */
+  padding: 0.14em 0.22em 0.12em 0.06em;
+  margin: -0.14em -0.22em -0.12em -0.06em;
+  line-height: 1;
+  background-image: var(--rg-brush), var(--rg-base);
+  background-size: 300px 300px, 260% 100%;
+  background-position: 0 0, calc(var(--p, 0.5) * 100%) 50%;
+  background-blend-mode: soft-light, normal;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
+  filter:
+    drop-shadow(0 -0.5px 0 rgba(255, 238, 226, 0.55))
+    drop-shadow(0 1.5px 0 #7E4448)
+    drop-shadow(0 2.5px 0 #5E2D38)
+    drop-shadow(0 14px 18px rgba(18, 3, 16, 0.55));
+}
+
+.metal::after {
+  content: attr(data-n);
+  position: absolute;
+  inset: 0;
+  padding: inherit;
+  background-image: var(--rg-glint), var(--rg-spark);
+  background-size: 300% 100%, 180px 180px;
+  background-position:
+    calc((1 - var(--p, 0.5)) * 100%) 50%,
+    0 calc(var(--s, 0) * 1px);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 600ms ease-out;
+  pointer-events: none;
+}
+html.is-scrolling .metal::after { opacity: 1; transition-duration: 120ms; }
+
+/* ---------- Rose gold buttons ---------- */
+.btn-metal {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  color: #3D1738;
+  background-image: var(--rg-brush), var(--rg-base);
+  background-size: 300px 300px, 260% 100%;
+  background-position: 0 0, calc(var(--p, 0.5) * 100%) 50%;
+  background-blend-mode: soft-light, normal;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 246, 238, 0.85),
+    inset 0 -2px 0 rgba(126, 68, 72, 0.55),
+    0 2px 0 #7E4448,
+    0 3px 0 #5E2D38,
+    0 14px 24px rgba(18, 3, 16, 0.5);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.btn-metal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--rg-glint), var(--rg-spark);
+  background-size: 300% 100%, 180px 180px;
+  background-position:
+    calc((1 - var(--p, 0.5)) * 100%) 50%,
+    0 calc(var(--s, 0) * 1px);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 600ms ease-out;
+}
+.btn-metal > span { position: relative; z-index: 1; }
+html.is-scrolling .btn-metal::after { opacity: 0.9; transition-duration: 120ms; }
+.btn-metal:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 246, 238, 0.7),
+    inset 0 -1px 0 rgba(126, 68, 72, 0.5),
+    0 1px 0 #7E4448,
+    0 6px 12px rgba(18, 3, 16, 0.45);
+}
+
+.btn-outline-metal {
+  color: #F4D0BE;
+  border: 1.5px solid #D39A88;
+  box-shadow: 0 10px 20px rgba(18, 3, 16, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metal::after, .btn-metal::after { display: none; }
 }

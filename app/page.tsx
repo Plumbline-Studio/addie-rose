@@ -4,17 +4,17 @@ import Sheen from "./Sheen";
 
 function Listen({ large = false }: { large?: boolean }) {
   const base =
-    "inline-flex items-center justify-center rounded-full font-display font-semibold tracking-tight transition-colors";
+    "inline-flex items-center justify-center rounded-full font-display font-semibold tracking-tight";
   const size = large ? "px-7 py-4 text-lg" : "px-6 py-3.5 text-base";
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="flex flex-wrap gap-4">
       <a href={APPLE_MUSIC_URL} target="_blank" rel="noopener noreferrer"
-         className={`${base} ${size} bg-lavender text-plum hover:bg-lilac`}>
-        Listen on Apple Music
+         data-sheen className={`${base} ${size} btn-metal`}>
+        <span>Listen on Apple Music</span>
       </a>
       {SPOTIFY_URL && (
         <a href={SPOTIFY_URL} target="_blank" rel="noopener noreferrer"
-           className={`${base} ${size} border border-lavender text-lavender hover:bg-lavender hover:text-plum`}>
+           className={`${base} ${size} btn-outline-metal`}>
           Listen on Spotify
         </a>
       )}
@@ -31,7 +31,7 @@ export default function Home() {
 
       <section className="page" data-track="0">
         <h1 className="rise font-display font-extrabold leading-[0.82] tracking-[-0.05em] text-ivory text-[clamp(5.5rem,30vw,10rem)]">
-          Addie<br /><span data-sheen className="rosegold inline-block font-serif italic font-normal tracking-[-0.03em] pr-[0.08em]">18</span>
+          Addie<br /><span className="mt-[0.06em] block"><span data-sheen data-n="18" className="metal font-serif italic font-normal tracking-[-0.03em]">18</span></span>
         </h1>
         <p className="rise rise-2 mt-8 font-serif italic text-2xl leading-snug text-ivory max-w-[18ch]">
           18 songs I think you should meet.
@@ -45,8 +45,11 @@ export default function Home() {
         return (
           <section key={s.title} className="page" data-track={i + 1}
                    aria-label={`${i + 1}. ${s.title} by ${s.artist}`}>
-            <div data-sheen className="rosegold self-start font-serif italic font-normal leading-[0.9] tracking-[-0.02em] pr-[0.1em] text-[clamp(7rem,42vw,13rem)]">
-              {String(i + 1).padStart(2, "0")}
+            <div className="text-[clamp(7rem,42vw,13rem)] leading-none">
+              <span data-sheen data-n={String(i + 1).padStart(2, "0")}
+                    className="metal font-serif italic font-normal tracking-[-0.02em]">
+                {String(i + 1).padStart(2, "0")}
+              </span>
             </div>
             <h2 className="mt-6 font-display font-bold leading-[1.02] tracking-[-0.025em] text-ivory text-[clamp(2rem,9vw,3.25rem)] text-balance">
               {s.title}

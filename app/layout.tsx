@@ -3,7 +3,7 @@ import { Bricolage_Grotesque, Newsreader } from "next/font/google";
 import "./globals.css";
 
 const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-display", display: "swap" });
-const serif = Newsreader({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
+const serif = Newsreader({ subsets: ["latin"], style: ["normal", "italic"], axes: ["opsz"], variable: "--font-serif", display: "swap" });
 
 export const metadata: Metadata = {
   title: "Addie 18",

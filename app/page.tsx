@@ -1,5 +1,6 @@
 import { songs, APPLE_MUSIC_URL, SPOTIFY_URL } from "./songs";
 import Folio from "./Folio";
+import Sheen from "./Sheen";
 
 function Listen({ large = false }: { large?: boolean }) {
   const base =
@@ -26,12 +27,13 @@ export default function Home() {
   return (
     <main className="mx-auto max-w-xl">
       <Folio />
+      <Sheen />
 
       <section className="page" data-track="0">
         <h1 className="rise font-display font-extrabold leading-[0.82] tracking-[-0.05em] text-ivory text-[clamp(5.5rem,30vw,10rem)]">
-          Addie<br /><span className="text-lavender">18</span>
+          Addie<br /><span data-sheen className="rosegold inline-block font-serif italic font-normal tracking-[-0.03em] pr-[0.08em]">18</span>
         </h1>
-        <p className="rise rise-2 mt-8 font-serif italic text-2xl leading-snug text-ivory/90 max-w-[18ch]">
+        <p className="rise rise-2 mt-8 font-serif italic text-2xl leading-snug text-ivory max-w-[18ch]">
           18 songs I think you should meet.
         </p>
         <div className="rise rise-3 mt-10"><Listen /></div>
@@ -43,14 +45,14 @@ export default function Home() {
         return (
           <section key={s.title} className="page" data-track={i + 1}
                    aria-label={`${i + 1}. ${s.title} by ${s.artist}`}>
-            <div className="font-display font-extrabold leading-none tracking-[-0.06em] text-lavender tabular-nums text-[clamp(6rem,36vw,11rem)]">
+            <div data-sheen className="rosegold self-start font-serif italic font-normal leading-[0.9] tracking-[-0.02em] pr-[0.1em] text-[clamp(7rem,42vw,13rem)]">
               {String(i + 1).padStart(2, "0")}
             </div>
             <h2 className="mt-6 font-display font-bold leading-[1.02] tracking-[-0.025em] text-ivory text-[clamp(2rem,9vw,3.25rem)] text-balance">
               {s.title}
             </h2>
             <p className="mt-2 font-display text-lg text-lilac">{s.artist}</p>
-            <p className={`note mt-8 font-serif italic text-ivory/90 max-w-[34ch] ${isLast ? "text-[1.6rem] leading-[1.4]" : "text-[1.3rem] leading-[1.55]"}`}>
+            <p className={`note mt-8 font-serif italic text-ivory max-w-[34ch] ${isLast ? "text-[1.6rem] leading-[1.4]" : "text-[1.3rem] leading-[1.55]"}`}>
               {s.note}
             </p>
             {isLast && (

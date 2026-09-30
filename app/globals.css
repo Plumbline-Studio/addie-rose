@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --color-plum: #3D1738;
+  --color-ivory: #F6F0E4;
+  --color-lavender: #C8AED3;
+  --color-lilac: #DDD0E5;
+  --font-display: var(--font-display);
+  --font-serif: var(--font-serif);
+}
+
+html {
+  background: #3D1738;
+  color: #F6F0E4;
+  scroll-snap-type: y mandatory;
+  -webkit-text-size-adjust: 100%;
+}
+body { margin: 0; background: #3D1738; }
+
+.page {
+  min-height: 100svh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: max(3rem, env(safe-area-inset-top)) 1.75rem max(4.5rem, env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.note::before { content: "“"; }
+.note::after { content: "”"; }
+.note { hanging-punctuation: first; }
+
+::selection { background: #C8AED3; color: #3D1738; }
+
+a:focus-visible, button:focus-visible {
+  outline: 2px solid #DDD0E5;
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .rise { animation: rise 900ms cubic-bezier(.2,.7,.2,1) both; }
+  .rise-2 { animation-delay: 180ms; }
+  .rise-3 { animation-delay: 360ms; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+}

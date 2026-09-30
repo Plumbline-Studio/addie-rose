@@ -1,0 +1,64 @@
+import { songs, APPLE_MUSIC_URL, SPOTIFY_URL } from "./songs";
+import Folio from "./Folio";
+
+function Listen({ large = false }: { large?: boolean }) {
+  const base =
+    "inline-flex items-center justify-center rounded-full font-display font-semibold tracking-tight transition-colors";
+  const size = large ? "px-7 py-4 text-lg" : "px-6 py-3.5 text-base";
+  return (
+    <div className="flex flex-wrap gap-3">
+      <a href={APPLE_MUSIC_URL} target="_blank" rel="noopener noreferrer"
+         className={`${base} ${size} bg-lavender text-plum hover:bg-lilac`}>
+        Listen on Apple Music
+      </a>
+      {SPOTIFY_URL && (
+        <a href={SPOTIFY_URL} target="_blank" rel="noopener noreferrer"
+           className={`${base} ${size} border border-lavender text-lavender hover:bg-lavender hover:text-plum`}>
+          Listen on Spotify
+        </a>
+      )}
+    </div>
+  );
+}
+
+export default function Home() {
+  const last = songs.length - 1;
+  return (
+    <main className="mx-auto max-w-xl">
+      <Folio />
+
+      <section className="page" data-track="0">
+        <h1 className="rise font-display font-extrabold leading-[0.82] tracking-[-0.05em] text-ivory text-[clamp(5.5rem,30vw,10rem)]">
+          Addie<br /><span className="text-lavender">18</span>
+        </h1>
+        <p className="rise rise-2 mt-8 font-serif italic text-2xl leading-snug text-ivory/90 max-w-[18ch]">
+          18 songs I think you should meet.
+        </p>
+        <div className="rise rise-3 mt-10"><Listen /></div>
+        <p className="rise rise-3 mt-16 font-display text-sm text-lilac/60">Scroll to start</p>
+      </section>
+
+      {songs.map((s, i) => {
+        const isLast = i === last;
+        return (
+          <section key={s.title} className="page" data-track={i + 1}
+                   aria-label={`${i + 1}. ${s.title} by ${s.artist}`}>
+            <div className="font-display font-extrabold leading-none tracking-[-0.06em] text-lavender tabular-nums text-[clamp(6rem,36vw,11rem)]">
+              {String(i + 1).padStart(2, "0")}
+            </div>
+            <h2 className="mt-6 font-display font-bold leading-[1.02] tracking-[-0.025em] text-ivory text-[clamp(2rem,9vw,3.25rem)] text-balance">
+              {s.title}
+            </h2>
+            <p className="mt-2 font-display text-lg text-lilac">{s.artist}</p>
+            <p className={`note mt-8 font-serif italic text-ivory/90 max-w-[34ch] ${isLast ? "text-[1.6rem] leading-[1.4]" : "text-[1.3rem] leading-[1.55]"}`}>
+              {s.note}
+            </p>
+            {isLast && (
+              <div className="mt-14"><Listen large /></div>
+            )}
+          </section>
+        );
+      })}
+    </main>
+  );
+}

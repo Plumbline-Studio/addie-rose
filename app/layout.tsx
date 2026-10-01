@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Ballet, Bricolage_Grotesque, Newsreader } from "next/font/google";
+import { Bricolage_Grotesque, Newsreader, Pinyon_Script } from "next/font/google";
 import "./globals.css";
 
 const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-display", display: "swap" });
-const script = Ballet({ subsets: ["latin"], axes: ["opsz"], variable: "--font-script", display: "block" });
+const script = Pinyon_Script({ subsets: ["latin"], weight: "400", variable: "--font-script", display: "block" });
 const serif = Newsreader({ subsets: ["latin"], style: ["normal", "italic"], axes: ["opsz"], variable: "--font-serif", display: "swap" });
 
 export const metadata: Metadata = {

@@ -35,10 +35,10 @@ export default function Home() {
       <section className="page" data-track="0">
         <h1 className="rise text-ivory">
           <span className="block text-[clamp(4.25rem,19vw,7rem)]">
-            <span className="name-script block">Addison</span>
+            <span data-sheen data-n="Addison" className="metal name-script">Addison</span>
           </span>
           <span className="block text-[clamp(4.25rem,19vw,7rem)]" style={{ paddingLeft: "0.9em", marginTop: "-0.18em" }}>
-            <span className="name-script block">Rose</span>
+            <span data-sheen data-n="Rose" className="metal name-script">Rose</span>
           </span>
           <span className="mt-[0.2em] block text-[clamp(5.5rem,30vw,10rem)] leading-none"><span data-sheen data-n="18" className="metal font-serif italic font-normal tracking-[-0.03em]">18</span></span>
         </h1>

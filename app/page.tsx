@@ -1,6 +1,7 @@
 import { songs, APPLE_MUSIC_URL, SPOTIFY_URL } from "./songs";
 import Folio from "./Folio";
 import Sheen from "./Sheen";
+import Nightbloom from "./Nightbloom";
 
 function Listen({ large = false }: { large?: boolean }) {
   const base =
@@ -26,12 +27,19 @@ export default function Home() {
   const last = songs.length - 1;
   return (
     <main className="mx-auto max-w-xl">
+      <Nightbloom />
       <Folio />
       <Sheen />
 
       <section className="page" data-track="0">
-        <h1 className="rise font-display font-extrabold leading-[0.82] tracking-[-0.05em] text-ivory text-[clamp(5.5rem,30vw,10rem)]">
-          Addie<br /><span className="mt-[0.06em] block"><span data-sheen data-n="18" className="metal font-serif italic font-normal tracking-[-0.03em]">18</span></span>
+        <h1 className="rise text-ivory">
+          <span className="block text-[clamp(5rem,23vw,8.5rem)]">
+            <span className="name-script block">Addison</span>
+          </span>
+          <span className="block text-[clamp(5rem,23vw,8.5rem)]" style={{ paddingLeft: "0.95em", marginTop: "-0.32em" }}>
+            <span className="name-script block">Rose</span>
+          </span>
+          <span className="mt-[0.2em] block text-[clamp(5.5rem,30vw,10rem)] leading-none"><span data-sheen data-n="18" className="metal font-serif italic font-normal tracking-[-0.03em]">18</span></span>
         </h1>
         <p className="rise rise-2 mt-8 font-serif italic text-2xl leading-snug text-ivory max-w-[18ch]">
           18 songs I think you should meet.

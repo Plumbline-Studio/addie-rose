@@ -2,20 +2,21 @@
 
 @theme {
   --color-plum: #3D1738;
-  --color-ivory: #F8ECCB;
+  --color-ivory: #EEE2CF;
   --color-lavender: #C8AED3;
   --color-lilac: #DDD0E5;
   --font-display: var(--font-display);
   --font-serif: var(--font-serif);
+  --font-script: var(--font-script);
 }
 
 html {
   background: #3D1738;
-  color: #F8ECCB;
+  color: #EEE2CF;
   scroll-snap-type: y mandatory;
   -webkit-text-size-adjust: 100%;
 }
-body { margin: 0; background: #3D1738; }
+body { margin: 0; background: transparent; }
 
 .page {
   min-height: 100svh;
@@ -160,4 +161,16 @@ html.is-scrolling .btn-metal::after { opacity: 0.9; transition-duration: 120ms; 
 
 @media (prefers-reduced-motion: reduce) {
   .metal::after, .btn-metal::after { display: none; }
+}
+
+/* "Addison Rose" in Ballet. Its swash capitals reach well past the
+   letter box, so give them room and let them overlap the line above. */
+.name-script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-variation-settings: "opsz" 72;
+  line-height: 0.95;
+  padding: 0.12em 0.1em 0.18em 0.08em;
+  margin: -0.12em -0.1em -0.18em -0.08em;
+  text-shadow: 0 10px 28px rgba(18, 3, 16, 0.45);
 }

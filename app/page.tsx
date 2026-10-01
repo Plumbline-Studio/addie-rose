@@ -10,8 +10,9 @@ function Listen({ large = false }: { large?: boolean }) {
   return (
     <div className="flex flex-wrap gap-4">
       <a href={APPLE_MUSIC_URL} target="_blank" rel="noopener noreferrer"
-         data-sheen className={`${base} ${size} btn-metal`}>
-        <span>Listen on Apple Music</span>
+         className={`${base} ${size} btn-metal`}>
+        <span className="btn-sheen" aria-hidden><i /></span>
+        <span className="btn-label">Listen on Apple Music</span>
       </a>
       {SPOTIFY_URL && (
         <a href={SPOTIFY_URL} target="_blank" rel="noopener noreferrer"

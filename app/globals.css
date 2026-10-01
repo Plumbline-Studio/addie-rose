@@ -64,6 +64,8 @@ a:focus-visible, button:focus-visible {
   );
   --rg-brush: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004 0.9' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
   --rg-spark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.95 0 0 0 0 0.9 0 0 0 14 -8.6'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+  --rg-spark-fine: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.95 0 0 0 0 0.9 0 0 0 14 -9.5'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+  --rg-spark-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='d'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='27'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.2 0 0 0 0 0.22 0 0 0 13 -8.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d)'/%3E%3C/svg%3E");
   --rg-glint: linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.0) 42%, rgba(255,246,238,0.7) 50%, rgba(255,255,255,0.0) 58%, transparent 62%);
 }
 
@@ -104,21 +106,23 @@ a:focus-visible, button:focus-visible {
   color: transparent;
   -webkit-text-fill-color: transparent;
   mix-blend-mode: screen;
-  opacity: 0;
-  transition: opacity 600ms ease-out;
+  opacity: var(--energy, 0);
   pointer-events: none;
 }
-html.is-scrolling .metal::after { opacity: 1; transition-duration: 120ms; }
 
-/* ---------- Rose gold buttons ---------- */
+/* ---------- Rose gold buttons ----------
+   The metal face is static. Motion lives in .btn-sheen, a child layer
+   clipped to the pill with clip-path (Safari honors it, unlike
+   overflow + border-radius on blended layers). A soft gleam sweeps
+   across on a slow, eased loop that runs on the GPU. Scrolling raises
+   --energy, which brightens the gleam and fades in the sparkle.      */
 .btn-metal {
   position: relative;
-  overflow: hidden;
   isolation: isolate;
   color: #3D1738;
   background-image: var(--rg-brush), var(--rg-base);
   background-size: 300px 300px, 260% 100%;
-  background-position: 0 0, calc(var(--p, 0.5) * 100%) 50%;
+  background-position: 0 0, 38% 50%;
   background-blend-mode: soft-light, normal;
   box-shadow:
     inset 0 1px 0 rgba(255, 246, 238, 0.85),
@@ -126,24 +130,59 @@ html.is-scrolling .metal::after { opacity: 1; transition-duration: 120ms; }
     0 2px 0 #7E4448,
     0 3px 0 #5E2D38,
     0 14px 24px rgba(18, 3, 16, 0.5);
-  transition: transform 120ms ease, box-shadow 120ms ease;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+  -webkit-tap-highlight-color: transparent;
 }
-.btn-metal::after {
-  content: "";
+.btn-metal > .btn-label { position: relative; z-index: 2; }
+
+.btn-sheen {
   position: absolute;
   inset: 0;
-  z-index: -1;
-  background-image: var(--rg-glint), var(--rg-spark);
-  background-size: 300% 100%, 180px 180px;
-  background-position:
-    calc((1 - var(--p, 0.5)) * 100%) 50%,
-    0 calc(var(--s, 0) * 1px);
-  mix-blend-mode: screen;
-  opacity: 0;
-  transition: opacity 600ms ease-out;
+  z-index: 1;
+  border-radius: inherit;
+  clip-path: inset(0 round 999px);
+  pointer-events: none;
 }
-.btn-metal > span { position: relative; z-index: 1; }
-html.is-scrolling .btn-metal::after { opacity: 0.9; transition-duration: 120ms; }
+/* sparkle: fades in with scroll energy, drifts slowly on its own */
+.btn-sheen::before {
+  content: "";
+  position: absolute;
+  inset: -40px 0;
+  background-image: var(--rg-spark-fine), var(--rg-spark-dark);
+  background-size: 180px 180px, 150px 150px;
+  opacity: calc(var(--energy, 0) * 0.8);
+  will-change: transform, opacity;
+  animation: spark-drift 14s linear infinite;
+}
+/* gleam: a wide, soft band of light */
+.btn-sheen > i {
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  left: 0;
+  width: 55%;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 248, 241, 0) 0%,
+    rgba(255, 248, 241, 0.18) 30%,
+    rgba(255, 250, 245, 0.72) 50%,
+    rgba(255, 248, 241, 0.18) 70%,
+    rgba(255, 248, 241, 0) 100%
+  );
+  opacity: calc(0.6 + var(--energy, 0) * 0.4);
+  transform: translate3d(-100%, 0, 0) skewX(-12deg);
+  will-change: transform;
+  animation: gleam 7s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+@keyframes gleam {
+  0%   { transform: translate3d(-100%, 0, 0) skewX(-12deg); }
+  48%  { transform: translate3d(190%, 0, 0) skewX(-12deg); }
+  100% { transform: translate3d(190%, 0, 0) skewX(-12deg); }
+}
+@keyframes spark-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, 180px, 0); }
+}
 .btn-metal:active {
   transform: translateY(2px);
   box-shadow:
@@ -160,7 +199,7 @@ html.is-scrolling .btn-metal::after { opacity: 0.9; transition-duration: 120ms; 
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .metal::after, .btn-metal::after { display: none; }
+  .metal::after, .btn-sheen { display: none; }
 }
 
 /* "Addison Rose" in Ballet. Its swash capitals reach well past the
